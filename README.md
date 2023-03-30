@@ -1,156 +1,39 @@
-# CONFIGURAÇÕES INICIAIS PARA UM PROJETO REACT COM JS, EDITORCONFIG, PRETTIER, ESLINT E PROP-TYPES
+This code exports a custom React hook called `useFetch` that takes in two parameters: `url` and `options`. When this hook is called in the code, it will fetch data from the specified URL and return the result and loading state.
 
-- comando para criar um projeto react na pasta local:
-`npx create-react-app .`
+The hook utilizes React's built-in hooks such as `useState`, `useEffect`, and `useRef`. The `useState` hook is used to manage and update the state of `result` and `loading`. `useRef` creates a mutable reference for `url` and `options` which can be modified without triggering a re-render. 
 
-- instalar a extensão para o VSCode "EditorConfig for VS Code"
-clicar com botão direito na árvore de diretórios do projeto e então em "Generate .editorconfig"
+The `useEffect` hook runs functions based on specific variables or conditions being met. In this code, there are two separate `useEffect` hooks. 
 
-- No arquivo criado .editorconfig, colocar as seguintes linhas:
-```
-	# EditorConfig is awesome: https://EditorConfig.org
+The first `useEffect` hook observes changes to the `url` and `options` variables, updates the `shouldLoad` state, and triggers a re-render.
 
-	# top-most EditorConfig file
-	root = true
+The second `useEffect` hook runs when `shouldLoad` is changed. This hook fetches data from the `url` and sets the state of `result` and `loading` accordingly. If the component using the hook is unmounted before the fetch is complete, the useEffect's cleanup function aborts the request and clears the data so that no error occurs. 
 
-	[*]
-	indent_style = space
-	indent_size = 2
-	end_of_line = lf
-	charset = utf-8
-	trim_trailing_whitespace = true
-	insert_final_newline = true
-```
+Finally, the hook returns an array containing `result` and `loading`.
 
-- criar os seguintes arquivos na raiz do projeto, com seus respectivos conteúdos de configuração:
-  
-`.eslintrc.js`
+
+Here's an example of how you can use the `useFetch` hook in a React component:
 
 ```
-	module.exports = {
-	  env: {
-	    browser: true,
-	    es2021: true,
-	    jest: true,
-	  },
-	  extends: [
-	    'eslint:recommended',
-	    'plugin:react/recommended',
-	    'plugin:react-hooks/recommended',
-	    'plugin:prettier/recommended',
-	  ],
-	  parserOptions: {
-	    ecmaFeatures: {
-	      jsx: true,
-	    },
-	    ecmaVersion: 12,
-	    sourceType: 'module',
-	  },
-	  plugins: ['react'],
-	  settings: {
-	    react: {
-	      version: 'detect',
-	    },
-	  },
-	  rules: {
-	    'react/react-in-jsx-scope': 'off',
-	  },
-	};
+import React from 'react';
+import { useFetch } from './useFetch';
+
+const MyComponent = () => {
+  const [data, loading] = useFetch('https://jsonplaceholder.typicode.com/todos/1', {});
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <p>{data.title}</p>
+    </div>
+  );
+}
+
+export default MyComponent;
 ```
 
-`.prettierrc.js`
+This example fetches data from the specified URL using `useFetch`. The loading state is used to display a message while the data is being fetched. Once the data has been fetched, it is displayed on the screen (`data.title`). 
 
-```
-	module.exports = {
-	  semi: true,
-	  trailingComma: 'all',
-	  singleQuote: true,
-	  printWidth: 120,
-	  tabWidth: 2
-	}
-```
-
-- Depois rodar os seguinte comando no terminal para que as configurações sejam carregadas adequadamente
-
-`npm i -D prettier eslint-config-prettier eslint-plugin-prettier`
-
-- Pronto! O Prettier e o ESlint estão configurados. Para que eles corrijam todos os arquivos de seu projeto (tanto os .js quanto os .jsx) rode os seguintes comandos:
-
-`npx eslint src/**/*.js --fix`
-`npx eslint src/**/*.jsx --fix`
-
-- Vale a pena já instalar o Prop-Types, para já deixar tudo pronto:
-
-`npm i prop-types`
-
-_______________
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Note that the second parameter, `{}`, is an options object that can be used to configure the request (e.g., method, headers, body, etc.). In this example, no options are passed in so the default options will be used. You can also pass in any options supported by the Fetch API.
